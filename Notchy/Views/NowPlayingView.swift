@@ -11,10 +11,12 @@ struct NowPlayingView: View {
                     Text(service.info.title)
                         .font(.system(size: 15, weight: .semibold))
                         .lineLimit(1)
-                    Text(service.info.artist)
-                        .font(.system(size: 13))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                    if !service.info.artist.isEmpty {
+                        Text(service.info.artist)
+                            .font(.system(size: 13))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
                     Spacer()
                     controls
                 }
@@ -42,15 +44,19 @@ struct NowPlayingView: View {
 
     private var controls: some View {
         HStack(spacing: 20) {
-            Button(action: service.previous) {
-                Image(systemName: "backward.fill")
+            if service.info.source.supportsTrackSkipping {
+                Button(action: service.previous) {
+                    Image(systemName: "backward.fill")
+                }
             }
             Button(action: service.togglePlayPause) {
                 Image(systemName: service.info.isPlaying ? "pause.fill" : "play.fill")
                     .font(.system(size: 18))
             }
-            Button(action: service.next) {
-                Image(systemName: "forward.fill")
+            if service.info.source.supportsTrackSkipping {
+                Button(action: service.next) {
+                    Image(systemName: "forward.fill")
+                }
             }
         }
         .buttonStyle(.plain)

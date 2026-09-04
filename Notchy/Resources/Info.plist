@@ -25,7 +25,7 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>Notchy controls Spotify and Music playback from the notch panel.</string>
+	<string>Notchy controls Spotify, Music, and Chrome playback from the notch panel.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Notchy shows today's calendar events in the notch panel.</string>
 	<key>NSCalendarsUsageDescription</key>

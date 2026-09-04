@@ -3,14 +3,20 @@ import AppKit
 enum NowPlayingSource: String {
     case spotify = "Spotify"
     case music = "Music"
+    case chrome = "Chrome"
     case none = "None"
 
     var symbolName: String {
         switch self {
         case .spotify: return "music.note"
         case .music: return "music.note"
+        case .chrome: return "play.rectangle.fill"
         case .none: return "speaker.slash"
         }
+    }
+
+    var supportsTrackSkipping: Bool {
+        self == .spotify || self == .music
     }
 }
 
