@@ -61,7 +61,7 @@ struct ShelfPanelView: View {
                 Spacer()
                 Button("Clear", action: service.clear)
                     .font(.system(size: 11))
-                    .buttonStyle(.plain)
+                    .buttonStyle(.pressable)
                     .foregroundStyle(.secondary)
             }
             ScrollView {

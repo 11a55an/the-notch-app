@@ -25,11 +25,13 @@ struct NowPlayingView: View {
                 Text(service.info.title)
                     .font(.system(size: 14.5, weight: .semibold))
                     .lineLimit(1)
+                    .contentTransition(.opacity)
                 if !service.info.artist.isEmpty {
                     Text(service.info.artist)
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
+                        .contentTransition(.opacity)
                 }
             }
             .frame(width: 130, alignment: .leading)
@@ -38,6 +40,7 @@ struct NowPlayingView: View {
 
             progressColumn
         }
+        .animation(.easeInOut(duration: 0.25), value: service.info.title)
     }
 
     private var artwork: some View {
@@ -46,6 +49,7 @@ struct NowPlayingView: View {
                 Image(nsImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
+                    .transition(.opacity)
             } else {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(.quaternary)
@@ -54,7 +58,29 @@ struct NowPlayingView: View {
         }
         .frame(width: 60, height: 60)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(alignment: .bottomTrailing) {
+            sourceBadge
+                .offset(x: 4, y: 4)
+        }
         .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
+    }
+
+    private var sourceBadge: some View {
+        Image(systemName: service.info.source == .chrome ? "globe" : "music.note")
+            .font(.system(size: 7, weight: .bold))
+            .foregroundStyle(.white)
+            .frame(width: 14, height: 14)
+            .background(sourceBadgeColor, in: Circle())
+            .overlay(Circle().strokeBorder(.black.opacity(0.4), lineWidth: 1))
+    }
+
+    private var sourceBadgeColor: Color {
+        switch service.info.source {
+        case .spotify: return Color(red: 0.11, green: 0.73, blue: 0.33)
+        case .music: return Color(red: 0.98, green: 0.24, blue: 0.35)
+        case .chrome: return Color(red: 0.26, green: 0.52, blue: 0.96)
+        case .none: return .gray
+        }
     }
 
     private var controls: some View {
@@ -81,7 +107,7 @@ struct NowPlayingView: View {
                 .frame(width: prominent ? 28 : 24, height: prominent ? 28 : 24)
                 .background(prominent ? Color.primary.opacity(0.12) : .clear, in: Circle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .foregroundStyle(.primary)
     }
 

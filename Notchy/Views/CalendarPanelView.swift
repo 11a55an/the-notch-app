@@ -11,16 +11,19 @@ struct CalendarPanelView: View {
 
     var body: some View {
         DashboardCard(title: "Calendar", symbolName: "calendar", content: {
-            if service.authorizationDenied {
-                message("Calendar access denied", symbol: "calendar.badge.exclamationmark")
-            } else {
-                switch displayMode {
-                case .month:
-                    MonthCalendarView().environmentObject(service)
-                case .events:
-                    eventsList
+            Group {
+                if service.authorizationDenied {
+                    message("Calendar access denied", symbol: "calendar.badge.exclamationmark")
+                } else {
+                    switch displayMode {
+                    case .month:
+                        MonthCalendarView().environmentObject(service)
+                    case .events:
+                        eventsList
+                    }
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }, accessory: {
             if !service.authorizationDenied {
                 modeToggle
@@ -51,7 +54,7 @@ struct CalendarPanelView: View {
                     in: RoundedRectangle(cornerRadius: 5, style: .continuous)
                 )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.pressable)
         .foregroundStyle(displayMode == mode ? Color.accentColor : .secondary)
     }
 
