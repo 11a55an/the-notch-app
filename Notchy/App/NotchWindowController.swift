@@ -5,8 +5,8 @@ final class NotchWindowController: NSWindowController {
     private let viewModel = NotchViewModel()
     private var proximityMonitor: HoverProximityMonitor?
 
-    private static let expandedWidth: CGFloat = 560
-    private static let expandedHeight: CGFloat = 340
+    private static let expandedWidth: CGFloat = 600
+    private static let expandedHeight: CGFloat = 372
 
     convenience init() {
         let panel = NotchPanel(
@@ -17,7 +17,7 @@ final class NotchWindowController: NSWindowController {
         )
         panel.isOpaque = false
         panel.backgroundColor = .clear
-        panel.hasShadow = false
+        panel.hasShadow = true
         panel.level = NSWindow.Level(rawValue: Int(CGWindowLevelForKey(.maximumWindow)))
         panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenAuxiliary, .ignoresCycle]
         panel.isMovable = false
@@ -55,8 +55,9 @@ final class NotchWindowController: NSWindowController {
         let geometry = NotchGeometry.current()
         let notchFrame = geometry.frameInScreen
 
+        let expandedHeight = Self.expandedHeight + (geometry.hasPhysicalNotch ? 18 : 0)
         let width = expanded ? Self.expandedWidth : max(notchFrame.width, 180)
-        let height = expanded ? Self.expandedHeight : max(notchFrame.height, 32)
+        let height = expanded ? expandedHeight : max(notchFrame.height, 32)
 
         let x = notchFrame.midX - width / 2
         let y = notchFrame.maxY - height
@@ -67,9 +68,12 @@ final class NotchWindowController: NSWindowController {
                 context.duration = 0.32
                 context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
                 window.animator().setFrame(newFrame, display: true)
+            } completionHandler: {
+                Task { @MainActor in window.invalidateShadow() }
             }
         } else {
             window.setFrame(newFrame, display: true)
+            window.invalidateShadow()
         }
     }
 }

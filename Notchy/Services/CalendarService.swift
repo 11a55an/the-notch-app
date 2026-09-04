@@ -5,6 +5,7 @@ import Combine
 @MainActor
 final class CalendarService: ObservableObject {
     @Published private(set) var todaysEvents: [CalendarEventInfo] = []
+    @Published private(set) var monthEventDays: Set<DateComponents> = []
     @Published private(set) var authorizationDenied = false
 
     private let store = EKEventStore()
@@ -43,6 +44,11 @@ final class CalendarService: ObservableObject {
     }
 
     func refresh() {
+        refreshTodaysEvents()
+        refreshMonthEventDays()
+    }
+
+    private func refreshTodaysEvents() {
         let calendar = Calendar.current
         let now = Date()
         guard let startOfDay = calendar.dateInterval(of: .day, for: now)?.start,
@@ -62,5 +68,14 @@ final class CalendarService: ObservableObject {
                 )
             }
         todaysEvents = events
+    }
+
+    private func refreshMonthEventDays() {
+        let calendar = Calendar.current
+        guard let monthInterval = calendar.dateInterval(of: .month, for: Date()) else { return }
+
+        let predicate = store.predicateForEvents(withStart: monthInterval.start, end: monthInterval.end, calendars: nil)
+        let events = store.events(matching: predicate)
+        monthEventDays = Set(events.map { calendar.dateComponents([.year, .month, .day], from: $0.startDate) })
     }
 }
