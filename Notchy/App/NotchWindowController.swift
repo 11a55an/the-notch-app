@@ -6,7 +6,7 @@ final class NotchWindowController: NSWindowController {
     private var proximityMonitor: HoverProximityMonitor?
 
     private static let expandedWidth: CGFloat = 600
-    private static let expandedHeight: CGFloat = 372
+    private static let expandedHeight: CGFloat = 414
 
     convenience init() {
         let panel = NotchPanel(
@@ -26,7 +26,11 @@ final class NotchWindowController: NSWindowController {
 
         self.init(window: panel)
 
-        let hosting = NSHostingView(rootView: NotchRootView().environmentObject(viewModel))
+        let hosting = NSHostingView(
+            rootView: NotchRootView()
+                .environmentObject(viewModel)
+                .environmentObject(viewModel.nowPlaying)
+        )
         hosting.frame = .zero
         panel.contentView = hosting
     }

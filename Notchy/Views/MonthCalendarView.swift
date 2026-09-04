@@ -7,14 +7,14 @@ struct MonthCalendarView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 7)
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 3) {
             weekdayHeader
-            LazyVGrid(columns: columns, spacing: 3) {
+            LazyVGrid(columns: columns, spacing: 2) {
                 ForEach(Array(daysInMonth().enumerated()), id: \.offset) { _, date in
                     if let date {
                         dayCell(date)
                     } else {
-                        Color.clear.frame(height: 16)
+                        Color.clear.frame(height: 14)
                     }
                 }
             }
@@ -45,15 +45,15 @@ struct MonthCalendarView: View {
             calendar.dateComponents([.year, .month, .day], from: date)
         )
 
-        return VStack(spacing: 1) {
+        return VStack(spacing: 0.5) {
             Text("\(day)")
-                .font(.system(size: 10, weight: isToday ? .bold : .regular))
-                .frame(width: 16, height: 16)
+                .font(.system(size: 9.5, weight: isToday ? .bold : .regular))
+                .frame(width: 14, height: 14)
                 .background(isToday ? Color.accentColor : .clear, in: Circle())
                 .foregroundStyle(isToday ? .white : .primary)
             Circle()
                 .fill(hasEvents && !isToday ? Color.accentColor : .clear)
-                .frame(width: 3, height: 3)
+                .frame(width: 2.5, height: 2.5)
         }
     }
 
