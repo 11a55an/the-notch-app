@@ -9,7 +9,7 @@ final class NotchViewModel: ObservableObject {
             onExpandedChanged?(isExpanded)
         }
     }
-    @Published var selectedTab: NotchTab = .nowPlaying
+    @Published var hasPhysicalNotch = NotchGeometry.current().hasPhysicalNotch
 
     let nowPlaying = NowPlayingService()
     let calendar = CalendarService()

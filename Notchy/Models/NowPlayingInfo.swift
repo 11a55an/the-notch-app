@@ -26,6 +26,8 @@ struct NowPlayingInfo: Equatable {
     var artist: String = ""
     var album: String = ""
     var isPlaying: Bool = false
+    var elapsedSeconds: Double = 0
+    var durationSeconds: Double = 0
     var artwork: NSImage?
 
     static func == (lhs: NowPlayingInfo, rhs: NowPlayingInfo) -> Bool {
@@ -33,7 +35,9 @@ struct NowPlayingInfo: Equatable {
         lhs.title == rhs.title &&
         lhs.artist == rhs.artist &&
         lhs.album == rhs.album &&
-        lhs.isPlaying == rhs.isPlaying
+        lhs.isPlaying == rhs.isPlaying &&
+        lhs.elapsedSeconds == rhs.elapsedSeconds &&
+        lhs.durationSeconds == rhs.durationSeconds
     }
 
     var isActive: Bool { source != .none && !title.isEmpty }

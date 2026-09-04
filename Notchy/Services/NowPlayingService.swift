@@ -62,6 +62,23 @@ final class NowPlayingService: ObservableObject {
         send(spotify: "previous track", music: "previous track")
     }
 
+    func seek(to seconds: Double) {
+        let source = info.source
+        info.elapsedSeconds = seconds
+        Task.detached(priority: .userInitiated) {
+            switch source {
+            case .spotify:
+                AppleScriptRunner.run("tell application \"Spotify\" to set player position to \(seconds)")
+            case .music:
+                AppleScriptRunner.run("tell application \"Music\" to set player position to \(seconds)")
+            case .chrome:
+                AppleScriptRunner.run(Self.chromeSeekScript(to: seconds))
+            case .none:
+                break
+            }
+        }
+    }
+
     private func send(spotify spotifyCommand: String, music musicCommand: String) {
         let source = info.source
         Task.detached(priority: .userInitiated) {
@@ -80,13 +97,13 @@ final class NowPlayingService: ObservableObject {
         guard let key = result.artworkCacheKey else { return }
 
         if let cached = artworkCache[key] {
-            guard info == result else { return }
+            guard info.artworkCacheKey == key else { return }
             info.artwork = cached
             return
         }
 
         let artwork = await fetchArtwork(for: result)
-        guard info == result else { return }
+        guard info.artworkCacheKey == key else { return }
         info.artwork = artwork
         if let artwork {
             artworkCache[key] = artwork
@@ -119,7 +136,9 @@ final class NowPlayingService: ObservableObject {
                 set trackArtist to artist of current track
                 set trackAlbum to album of current track
                 set isNowPlaying to (player state is playing)
-                return trackName & "\u{1F}" & trackArtist & "\u{1F}" & trackAlbum & "\u{1F}" & (isNowPlaying as string)
+                set trackPosition to player position
+                set trackDuration to (duration of current track) / 1000
+                return trackName & "\u{1F}" & trackArtist & "\u{1F}" & trackAlbum & "\u{1F}" & (isNowPlaying as string) & "\u{1F}" & (trackPosition as string) & "\u{1F}" & (trackDuration as string)
             else
                 return ""
             end if
@@ -136,7 +155,9 @@ final class NowPlayingService: ObservableObject {
                 set trackArtist to artist of current track
                 set trackAlbum to album of current track
                 set isNowPlaying to (player state is playing)
-                return trackName & "\u{1F}" & trackArtist & "\u{1F}" & trackAlbum & "\u{1F}" & (isNowPlaying as string)
+                set trackPosition to player position
+                set trackDuration to duration of current track
+                return trackName & "\u{1F}" & trackArtist & "\u{1F}" & trackAlbum & "\u{1F}" & (isNowPlaying as string) & "\u{1F}" & (trackPosition as string) & "\u{1F}" & (trackDuration as string)
             else
                 return ""
             end if
@@ -148,19 +169,25 @@ final class NowPlayingService: ObservableObject {
     nonisolated private func parseTrackInfo(_ raw: String?, source: NowPlayingSource) -> NowPlayingInfo? {
         guard let raw, !raw.isEmpty else { return nil }
         let parts = raw.components(separatedBy: "\u{1F}")
-        guard parts.count == 4 else { return nil }
+        guard parts.count == 6 else { return nil }
         var info = NowPlayingInfo()
         info.source = source
         info.title = parts[0]
         info.artist = parts[1]
         info.album = parts[2]
         info.isPlaying = parts[3] == "true"
+        info.elapsedSeconds = Double(parts[4]) ?? 0
+        info.durationSeconds = Double(parts[5]) ?? 0
         return info
     }
 
-    nonisolated private static let chromeMediaQueryJS = "(function() { var els = document.querySelectorAll('video, audio'); for (var i = 0; i < els.length; i++) { if (els[i].readyState > 0) { return JSON.stringify({ title: document.title, playing: !els[i].paused && !els[i].ended }); } } return JSON.stringify({ title: '', playing: false }); })()"
+    nonisolated private static let chromeMediaQueryJS = "(function() { var els = document.querySelectorAll('video, audio'); for (var i = 0; i < els.length; i++) { if (els[i].readyState > 0) { return JSON.stringify({ title: document.title, playing: !els[i].paused && !els[i].ended, currentTime: els[i].currentTime, duration: els[i].duration || 0 }); } } return JSON.stringify({ title: '', playing: false, currentTime: 0, duration: 0 }); })()"
 
     nonisolated private static let chromeToggleJS = "(function() { var els = document.querySelectorAll('video, audio'); for (var i = 0; i < els.length; i++) { if (els[i].readyState > 0) { els[i].paused ? els[i].play() : els[i].pause(); return 'true'; } } return 'false'; })()"
+
+    nonisolated private static func chromeSeekJS(to seconds: Double) -> String {
+        "(function() { var els = document.querySelectorAll('video, audio'); for (var i = 0; i < els.length; i++) { if (els[i].readyState > 0) { els[i].currentTime = \(seconds); return 'true'; } } return 'false'; })()"
+    }
 
     nonisolated private static let chromeFindPlayingTabScript = """
     tell application "Google Chrome"
@@ -205,6 +232,23 @@ final class NowPlayingService: ObservableObject {
     end tell
     """
 
+    nonisolated private static func chromeSeekScript(to seconds: Double) -> String {
+        """
+        tell application "Google Chrome"
+            repeat with w in windows
+                repeat with t in tabs of w
+                    try
+                        set r to execute t javascript "\(chromeSeekJS(to: seconds))"
+                    on error
+                        set r to "false"
+                    end try
+                    if r is "true" then return
+                end repeat
+            end repeat
+        end tell
+        """
+    }
+
     nonisolated private func fetchChrome() -> NowPlayingInfo? {
         guard let raw = AppleScriptRunner.runString(Self.chromeFindPlayingTabScript), !raw.isEmpty,
               let data = raw.data(using: .utf8),
@@ -215,6 +259,8 @@ final class NowPlayingService: ObservableObject {
         info.source = .chrome
         info.title = title
         info.isPlaying = (json["playing"] as? Bool) ?? false
+        info.elapsedSeconds = (json["currentTime"] as? Double) ?? 0
+        info.durationSeconds = (json["duration"] as? Double) ?? 0
         return info
     }
 
