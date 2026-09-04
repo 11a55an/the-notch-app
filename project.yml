@@ -33,7 +33,7 @@ targets:
         LSMinimumSystemVersion: "14.0"
         NSCalendarsUsageDescription: "Notchy shows today's calendar events in the notch panel."
         NSCalendarsFullAccessUsageDescription: "Notchy shows today's calendar events in the notch panel."
-        NSAppleEventsUsageDescription: "Notchy controls Spotify and Music playback from the notch panel."
+        NSAppleEventsUsageDescription: "Notchy controls Spotify, Music, and Chrome playback from the notch panel."
         NSHumanReadableCopyright: "Notchy"
     entitlements:
       path: Notchy/Resources/Notchy.entitlements
@@ -43,6 +43,7 @@ targets:
         com.apple.security.temporary-exception.apple-events:
           - com.spotify.client
           - com.apple.Music
+          - com.google.Chrome
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hassan.notchy.app
