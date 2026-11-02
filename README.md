@@ -1,3 +1,5 @@
+<img src="screenshots/logo.png" width="96" alt="The Notch App logo">
+
 # The Notch App
 
 A macOS menu bar app that turns the notch into a hover-activated dashboard, and
