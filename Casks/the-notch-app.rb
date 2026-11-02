@@ -1,6 +1,6 @@
 cask "the-notch-app" do
-  version "0.1.0"
-  sha256 "3491c12ad352d2f24953fdc11ec04a1b4586caae9d3dfe2718ae4cebdb15afe4"
+  version "0.1.1"
+  sha256 "df7ca363dea668e9eabd89771167b1f19ba116348480ebe543f5ead99f4a3f4c"
 
   url "https://github.com/11a55an/the-notch-app/releases/download/v#{version}/TheNotchApp-#{version}.zip"
   name "The Notch App"

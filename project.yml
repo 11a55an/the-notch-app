@@ -27,8 +27,8 @@ targets:
       properties:
         CFBundleName: The Notch App
         CFBundleDisplayName: The Notch App
-        CFBundleShortVersionString: "0.1.0"
-        CFBundleVersion: "1"
+        CFBundleShortVersionString: "0.1.1"
+        CFBundleVersion: "2"
         LSUIElement: true
         LSMinimumSystemVersion: "14.0"
         NSCalendarsUsageDescription: "The Notch App shows today's calendar events in the notch panel."
