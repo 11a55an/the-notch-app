@@ -3,20 +3,14 @@ import Combine
 
 @MainActor
 final class NotchViewModel: ObservableObject {
-    @Published var isExpanded = false {
-        didSet {
-            guard oldValue != isExpanded else { return }
-            onExpandedChanged?(isExpanded)
-        }
-    }
+    @Published var isExpanded = false
     @Published var hasPhysicalNotch = NotchGeometry.current().hasPhysicalNotch
 
     let nowPlaying = NowPlayingService()
     let calendar = CalendarService()
     let stats = SystemStatsService()
     let shelf = FileShelfService()
-
-    var onExpandedChanged: ((Bool) -> Void)?
+    let premierLeague = PremierLeagueScoreService()
 
     private var collapseWorkItem: DispatchWorkItem?
 
@@ -24,6 +18,7 @@ final class NotchViewModel: ObservableObject {
         nowPlaying.startPolling()
         stats.startPolling()
         calendar.requestAccessAndRefresh()
+        premierLeague.startPolling()
     }
 
     func setHovering(_ hovering: Bool) {

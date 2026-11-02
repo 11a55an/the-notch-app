@@ -1,5 +1,15 @@
 import AppKit
 
+enum NotchLiveActivityMetrics {
+    static let sideContentWidth: CGFloat = 31.5
+    static let scoreSideContentWidth: CGFloat = 70
+    static let horizontalPadding: CGFloat = 14
+    static let extraHeight: CGFloat = 2
+    static let bottomCornerRadius: CGFloat = 12
+    static let topCornerRadius: CGFloat = 12
+    static let topEarWidth: CGFloat = 8
+}
+
 struct NotchGeometry {
     let screen: NSScreen
     let notchWidth: CGFloat
