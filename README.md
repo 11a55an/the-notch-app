@@ -54,16 +54,16 @@ Download the latest `.zip` from
 [Releases](https://github.com/11a55an/the-notch-app/releases), unzip it, and
 move `The Notch App.app` to `/Applications`.
 
+### Gatekeeper
+
 This app isn't notarized by Apple — it's a solo project, not worth a $99/yr
-developer account yet — so on first launch macOS will say it's from an
-"unidentified developer." Either click through via *System Settings → Privacy
-& Security → Open Anyway*, or run:
+developer account yet — so on first launch (via Homebrew or manually) macOS
+will likely say it's from an "unidentified developer." Either click through
+via *System Settings → Privacy & Security → Open Anyway*, or run:
 
 ```sh
 xattr -dr com.apple.quarantine "/Applications/The Notch App.app"
 ```
-
-(The Homebrew install does this for you automatically.)
 
 ### Build from source
 
