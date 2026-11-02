@@ -12,7 +12,7 @@ A macOS menu bar app that turns the notch into a hover-activated panel: now play
 
 ```sh
 xcodegen generate
-open Notchy.xcodeproj
+open TheNotchApp.xcodeproj
 ```
 
 Build and run from Xcode. The app has no dock icon or main window; look for the notch panel and the menu bar icon.

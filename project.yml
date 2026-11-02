@@ -1,4 +1,4 @@
-name: Notchy
+name: TheNotchApp
 options:
   bundleIdPrefix: com.hassan.notchy
   deploymentTarget:
@@ -15,15 +15,15 @@ settings:
     ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
 
 targets:
-  Notchy:
+  TheNotchApp:
     type: application
     platform: macOS
     sources:
-      - path: Notchy
+      - path: TheNotchApp
     resources:
-      - path: Notchy/Resources/Assets.xcassets
+      - path: TheNotchApp/Resources/Assets.xcassets
     info:
-      path: Notchy/Resources/Info.plist
+      path: TheNotchApp/Resources/Info.plist
       properties:
         CFBundleName: The Notch App
         CFBundleDisplayName: The Notch App
@@ -36,7 +36,7 @@ targets:
         NSAppleEventsUsageDescription: "The Notch App controls Spotify, Music, and Chrome playback from the notch panel."
         NSHumanReadableCopyright: "The Notch App"
     entitlements:
-      path: Notchy/Resources/Notchy.entitlements
+      path: TheNotchApp/Resources/TheNotchApp.entitlements
       properties:
         com.apple.security.automation.apple-events: true
         com.apple.security.app-sandbox: false
@@ -47,5 +47,5 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.hassan.notchy.app
-        PRODUCT_NAME: Notchy
+        PRODUCT_NAME: The Notch App
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
