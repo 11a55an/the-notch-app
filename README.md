@@ -1,4 +1,4 @@
-# Notchy
+# The Notch App
 
 A macOS menu bar app that turns the notch into a hover-activated panel: now playing (Spotify/Apple Music) with controls, today's calendar events, system stats, and a file shelf.
 

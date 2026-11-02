@@ -29,11 +29,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     private func setUpStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        item.button?.image = NSImage(systemSymbolName: "rectangle.topthird.inset.filled", accessibilityDescription: "Notchy")
+        item.button?.image = NSImage(systemSymbolName: "rectangle.topthird.inset.filled", accessibilityDescription: "The Notch App")
 
         let menu = NSMenu()
         menu.delegate = self
-        menu.addItem(withTitle: "About Notchy", action: #selector(showAbout), keyEquivalent: "")
+        menu.addItem(withTitle: "About The Notch App", action: #selector(showAbout), keyEquivalent: "")
         menu.addItem(.separator())
 
         let teamMenu = NSMenu()
@@ -54,7 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(hideItem)
 
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit Notchy", action: #selector(quit), keyEquivalent: "q")
+        menu.addItem(withTitle: "Quit The Notch App", action: #selector(quit), keyEquivalent: "q")
         for menuItem in menu.items where menuItem.action != nil {
             menuItem.target = menuItem.target ?? self
         }

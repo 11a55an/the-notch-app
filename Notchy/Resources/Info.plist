@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Notchy</string>
+	<string>The Notch App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Notchy</string>
+	<string>The Notch App</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,12 +25,12 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
-	<string>Notchy controls Spotify, Music, and Chrome playback from the notch panel.</string>
+	<string>The Notch App controls Spotify, Music, and Chrome playback from the notch panel.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>Notchy shows today's calendar events in the notch panel.</string>
+	<string>The Notch App shows today's calendar events in the notch panel.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>Notchy shows today's calendar events in the notch panel.</string>
+	<string>The Notch App shows today's calendar events in the notch panel.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Notchy</string>
+	<string>The Notch App</string>
 </dict>
 </plist>
