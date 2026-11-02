@@ -18,7 +18,7 @@ struct ShelfPanelView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 64)
         .onDrop(of: [.fileURL], isTargeted: $isTargeted) { providers in
-            handleDrop(providers)
+            service.handleDrop(providers)
             return true
         }
     }
@@ -90,18 +90,6 @@ struct ShelfPanelView: View {
         .frame(width: 64)
         .contextMenu {
             Button("Remove") { service.remove(item) }
-        }
-    }
-
-    private func handleDrop(_ providers: [NSItemProvider]) {
-        for provider in providers {
-            provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier) { data, _ in
-                guard let data = data as? Data,
-                      let url = URL(dataRepresentation: data, relativeTo: nil) else { return }
-                Task { @MainActor in
-                    service.add(urls: [url])
-                }
-            }
         }
     }
 }

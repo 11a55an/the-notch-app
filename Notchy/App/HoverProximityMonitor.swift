@@ -17,10 +17,11 @@ final class HoverProximityMonitor {
     }
 
     func start() {
-        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved]) { [weak self] _ in
+        let trackedEvents: NSEvent.EventTypeMask = [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged]
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: trackedEvents) { [weak self] _ in
             self?.handleMouseMoved()
         }
-        localMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { [weak self] event in
+        localMonitor = NSEvent.addLocalMonitorForEvents(matching: trackedEvents) { [weak self] event in
             self?.handleMouseMoved()
             return event
         }
